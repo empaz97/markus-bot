@@ -16,6 +16,7 @@ const commands = {
     niceResponses: ["Only because you asked nicely ☕"]
   },
   quotes: {
+    type: "quote",
     commands: ["inspire me", "give me a quote", "say something inspirational"],
     responses: [
       '"Be yourself. Everyone else is already taken"',
@@ -34,6 +35,14 @@ const commands = {
       '"If you have made mistakes, even serious ones, there is always another chance for you. What we call failure is not the falling down but the staying down." - Mary Pickford',
       '"There may be times when we are powerless to prevent injustice, but there must never be a time when we fail to protest." - Elie Wiesel'
     ]
+  },
+  thanks: {
+    commands: ["thank you", "thanks"],
+    responses: ["You're very welcome", "No problem"]
+  },
+  how: {
+    commands: ["how are you"],
+    responses: ["I'm doing well, and yourself?"]
   }
 };
 
