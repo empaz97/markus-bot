@@ -1,10 +1,29 @@
-const express = require('express')
-const path = require('path')
-const PORT = process.env.PORT || 5000
+const Discord = require("discord.js");
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+const bot = new Discord.Client();
+const token = "ODMxOTczNjA0NjEwNDA4NTA4.YHdBzA.ddWGxQbMCbnrrWREL3gCvVNZlHU";
+const name = "markus";
+const punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+
+bot.on("ready", () => {
+  console.log("bot is ready");
+});
+
+bot.on("message", async msg => {
+  if (!msg.content.includes(name)) {
+    return;
+  }
+
+  const command = msg.content.toLowerCase().replace(punctuationRegex, "");
+
+  if (command === "hello markus!") {
+    msg.react("👋");
+    msg.reply("Hello, how are you!");
+  }
+
+  if (command === "say something, markus") {
+    msg.channel.send("Something.");
+  }
+});
+
+bot.login(token);
