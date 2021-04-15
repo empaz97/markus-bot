@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const commands = require("constants/commands");
 
 const bot = new Discord.Client();
 const token = "ODMxOTczNjA0NjEwNDA4NTA4.YHdBzA.ddWGxQbMCbnrrWREL3gCvVNZlHU";
@@ -10,25 +11,27 @@ bot.on("ready", () => {
 });
 
 bot.on("message", function(message) {
-  console.log("bot is here");
   if (message.author.bot) return;
-  if (!message.content.includes(name)) {
+
+  const messageContent = message.content
+    .toLowerCase()
+    .replace(punctuationRegex, "");
+  if (!messageContent.includes(name)) {
     return;
   }
 
-  const command = message.content.toLowerCase().replace(punctuationRegex, "");
-
-  if (command === "hello markus") {
-    console.log("reacting");
+  if (commands.HELP_COMMANDS.some(cmd => messageContent.includes(cmd))) {
+    message.channel.send(
+      "I'm a work in progress. If you have questions ask @LizardEm"
+    );
+  } else if (
+    commands.GREETING_COMMANDS.some(cmd => messageContent.includes(cmd))
+  ) {
     message.react("👋");
     message.reply("Hello, how are you!");
-  }
-
-  if (command === "say something markus") {
-    console.log("sending");
+  } else if (messageContent.includes("say something")) {
     message.channel.send("Something.");
   }
-  console.log("hey");
 });
 
 bot.login(token);
