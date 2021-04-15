@@ -31,11 +31,26 @@ class Markus {
     return true;
   }
 
+  checkPerson(name, personInfo) {
+    if (
+      this.messageContent.includes(`how is ${name}`) ||
+      this.messageContent.includes(`hows ${name}`)
+    ) {
+      this.message.channel.send(_.sample(personInfo.how));
+    } else if (
+      this.messageContent.includes(`where is ${name}`) ||
+      this.messageContent.includes(`wheres ${name}`)
+    ) {
+      this.message.channel.send(_.sample(personInfo.where));
+    }
+  }
+
   respondToMessage() {
     if (!this.messageContent.includes(name)) {
       return;
     }
     _.forEach(_.values(commands), command => this.checkCommand(command));
+    // _.forEach(people, (value, key) => this.checkPerson(key, value));
   }
 }
 
