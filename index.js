@@ -9,21 +9,26 @@ bot.on("ready", () => {
   console.log("bot is ready");
 });
 
-bot.on("message", async msg => {
-  if (!msg.content.includes(name)) {
+bot.on("message", function(message) {
+  console.log("bot is here");
+  if (message.author.bot) return;
+  if (!message.content.includes(name)) {
     return;
   }
 
-  const command = msg.content.toLowerCase().replace(punctuationRegex, "");
+  const command = message.content.toLowerCase().replace(punctuationRegex, "");
 
-  if (command === "hello markus!") {
-    msg.react("👋");
-    msg.reply("Hello, how are you!");
+  if (command === "hello markus") {
+    console.log("reacting");
+    message.react("👋");
+    message.reply("Hello, how are you!");
   }
 
-  if (command === "say something, markus") {
-    msg.channel.send("Something.");
+  if (command === "say something markus") {
+    console.log("sending");
+    message.channel.send("Something.");
   }
+  console.log("hey");
 });
 
 bot.login(token);
