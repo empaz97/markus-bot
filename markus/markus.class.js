@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const commands = require("../constants/commands");
+const textCommands = require("../constants/textCommands");
 const name = "markus";
 const punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
 
@@ -21,7 +21,7 @@ class Markus {
     );
   }
 
-  checkCommand(commandInfo) {
+  checkTextCommand(commandInfo) {
     if (commandInfo.commands.some(cmd => this._checkSome(cmd, commandInfo))) {
       if (commandInfo.reaction) {
         this.message.react(commandInfo.reaction);
@@ -59,7 +59,9 @@ class Markus {
     if (!this.messageContent.includes(name)) {
       return;
     }
-    _.forEach(_.values(commands), command => this.checkCommand(command));
+    _.forEach(_.values(textCommands), command =>
+      this.checkTextCommand(command)
+    );
     // _.forEach(people, (value, key) => this.checkPerson(key, value));
   }
 }

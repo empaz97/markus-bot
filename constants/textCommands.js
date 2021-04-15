@@ -1,12 +1,18 @@
-const commands = {
+const textCommands = {
   help: {
-    commands: ["help me", "what can you do", "how do you work"],
+    commands: [
+      "help me",
+      "what can you do",
+      "how do you work",
+      "docs",
+      "readme"
+    ],
     responses: [
-      "I'm a work in progress. Please contact Emerson if you need help"
+      "I'm a work in progress. A readme is in the works. Please contact Emerson if you need help"
     ]
   },
   greeting: {
-    commands: ["hello", "hi there", "howdy"],
+    commands: ["hello", "hi there", "howdy", "hey", "hi"],
     reaction: "👋",
     responses: ["Oh hello!", "Hello, how are you!", "Hey there!"]
   },
@@ -16,8 +22,13 @@ const commands = {
     niceResponses: ["Only because you asked nicely ☕"]
   },
   quotes: {
-    type: "quote",
-    commands: ["inspire me", "give me a quote", "say something inspirational"],
+    commands: [
+      "inspire me",
+      "give me a quote",
+      "say something inspirational",
+      "quote something",
+      "send a quote"
+    ],
     responses: [
       '> "Be yourself. Everyone else is already taken"',
       '> "Be gay do crimes."',
@@ -42,7 +53,12 @@ const commands = {
   },
   how: {
     commands: ["how are you", "how are you doing", "how are you today"],
-    responses: ["I'm doing well, and yourself?"]
+    responses: [
+      "I'm doing well, and yourself?",
+      "Pretty good",
+      "I'm okay. Thanks for asking",
+      "I think the real question is how are *you*?"
+    ]
   },
   love: {
     commands: ["i love you", "ily", "love you"],
@@ -51,4 +67,4 @@ const commands = {
   }
 };
 
-module.exports = commands;
+module.exports = textCommands;
