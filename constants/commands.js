@@ -41,8 +41,13 @@ const commands = {
     responses: ["You're very welcome", "No problem"]
   },
   how: {
-    commands: ["how are you"],
+    commands: ["how are you", "how are you doing", "how are you today"],
     responses: ["I'm doing well, and yourself?"]
+  },
+  love: {
+    commands: ["i love you", "ily", "love you"],
+    responses: ["I love you too", "Much love"],
+    reaction: "💙"
   }
 };
 

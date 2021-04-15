@@ -11,8 +11,18 @@ class Markus {
       .replace(punctuationRegex, "");
   }
 
+  _checkSome(command, commandInfo) {
+    if (commandInfo.noAnchor) {
+      return this.messageContent.includes(command);
+    }
+    return (
+      this.messageContent.includes(`${name} ${command}`) ||
+      this.messageContent.includes(`${command} ${name}`)
+    );
+  }
+
   checkCommand(commandInfo) {
-    if (commandInfo.commands.some(cmd => this.messageContent.includes(cmd))) {
+    if (commandInfo.commands.some(cmd => this._checkSome(cmd, commandInfo))) {
       if (commandInfo.reaction) {
         this.message.react(commandInfo.reaction);
       }
