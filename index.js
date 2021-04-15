@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const Markus = require("./markus.class");
+const Markus = require("./markus/markus.class");
 
 const bot = new Discord.Client();
 const token = "ODMxOTczNjA0NjEwNDA4NTA4.YHdBzA.ddWGxQbMCbnrrWREL3gCvVNZlHU";

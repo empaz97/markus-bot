@@ -1,13 +1,13 @@
 const people = {
   north: {
-    how: [""],
+    how: ["WIP"],
     where: ["WIP"]
   },
   josh: {
     how: ["WIP"],
     where: ["WIP"]
   },
-  simon: 
+  simon: {
     how: ["WIP"],
     where: ["WIP"]
   }

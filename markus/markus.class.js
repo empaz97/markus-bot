@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const commands = require("./constants/commands");
+const commands = require("../constants/commands");
 const name = "markus";
 const punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
 
