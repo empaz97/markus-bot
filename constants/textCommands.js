@@ -54,11 +54,20 @@ const textCommands = {
     responses: ["I love you too", "Much love"],
     reaction: "💙"
   },
+  hate: {
+    commands: ["hate you", "i hate you"],
+    responses: ["I thought we were friends"]
+  },
   alert: {
     commands: ["markus"],
     exact: true,
     responses: ["Yes?", "Can I help you with something?"]
   },
+  no: {
+    commands: ["markus no", "no markus"],
+    exact: true,
+    responses: ["Why not?", "Markus *yes*"]
+  }
   up: {
     commands: ["are you running", "are you up", "whats your status"],
     responses: ["I am up and running", "Fully functional!"]
@@ -74,6 +83,10 @@ const textCommands = {
       "I might be",
       "I'm whatever you want me to be"
     ]
+  },
+  good: {
+    commands: ["good boy"],
+    responses: ["I'm not a dog, but I appreciate the sentiment"]
   }
 };
 
