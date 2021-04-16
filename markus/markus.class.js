@@ -94,7 +94,7 @@ class Markus {
   checkChoose() {
     if (this._commandMatched({ commands: ["choose", "pick"] })) {
       const choiceArray = this.message.content.toLowerCase().split(":");
-      if (choiceArray.length < 2) return this.dontUnderstand();
+      if (choiceArray.length < 2) return;
       const choices = choiceArray[1].split(",");
       if (!choices.length) return this.dontUnderstand();
 
