@@ -67,7 +67,7 @@ const textCommands = {
     commands: ["markus no", "no markus"],
     exact: true,
     responses: ["Why not?", "Markus *yes*"]
-  }
+  },
   up: {
     commands: ["are you running", "are you up", "whats your status"],
     responses: ["I am up and running", "Fully functional!"]
