@@ -1,5 +1,8 @@
 const _ = require("lodash");
+const Discord = require("discord.js");
+
 const textCommands = require("../constants/textCommands");
+const embedCommands = require("../constants/embedCommands");
 const name = "markus";
 const punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
 
@@ -11,18 +14,23 @@ class Markus {
       .replace(punctuationRegex, "");
   }
 
-  _checkSome(command, commandInfo) {
-    if (commandInfo.noAnchor) {
-      return this.messageContent.includes(command);
-    }
-    return (
-      this.messageContent.includes(`${name} ${command}`) ||
-      this.messageContent.includes(`${command} ${name}`)
-    );
+  _commandMatched(commandInfo) {
+    return commandInfo.commands.some(command => {
+      if (commandInfo.exact) {
+        return this.messageContent === command;
+      }
+      if (commandInfo.noAnchor) {
+        return this.messageContent.includes(command);
+      }
+      return (
+        this.messageContent.includes(`${name} ${command}`) ||
+        this.messageContent.includes(`${command} ${name}`)
+      );
+    });
   }
 
   checkTextCommand(commandInfo) {
-    if (commandInfo.commands.some(cmd => this._checkSome(cmd, commandInfo))) {
+    if (this._commandMatched(commandInfo)) {
       if (commandInfo.reaction) {
         this.message.react(commandInfo.reaction);
       }
@@ -39,6 +47,30 @@ class Markus {
     }
     // not matched
     return true;
+  }
+
+  checkEmbedCommand(embedInfo) {
+    if (this._commandMatched(embedInfo)) {
+      const choice = _.sample(embedInfo.artifacts);
+      const embed = new Discord.MessageEmbed()
+        .setColor(_.get(embedInfo, "color", "#17c9ff"))
+        .setTitle(_.get(choice, "title", "Untitled"));
+
+      if (choice.url) {
+        embed.setURL(choice.url);
+      }
+      if (choice.author) {
+        embed.setAuthor(choice.author);
+      }
+      if (choice.image) {
+        embed.setImage(choice.image);
+      }
+      if (choice.description) {
+        embed.setDescription(choice.description);
+      }
+
+      this.message.channel.send(embed);
+    }
   }
 
   checkPerson(name, personInfo) {
@@ -62,6 +94,8 @@ class Markus {
     _.forEach(_.values(textCommands), command =>
       this.checkTextCommand(command)
     );
+
+    _.forEach(_.values(embedCommands), embed => this.checkEmbedCommand(embed));
     // _.forEach(people, (value, key) => this.checkPerson(key, value));
   }
 }
