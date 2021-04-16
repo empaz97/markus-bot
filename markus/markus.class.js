@@ -102,7 +102,8 @@ class Markus {
       const responseOptions = [
         `How about "${picked}"?`,
         `I choose "${picked}"`,
-        `My choice is ${picked}`
+        `My choice is "${picked}"`,
+        `What am I, a magic 8 ball?`
       ];
 
       this.message.channel.send(_.sample(responseOptions));

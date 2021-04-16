@@ -58,6 +58,22 @@ const textCommands = {
     commands: ["markus"],
     exact: true,
     responses: ["Yes?", "Can I help you with something?"]
+  },
+  up: {
+    commands: ["are you running", "are you up", "whats your status"],
+    responses: ["I am up and running", "Fully functional!"]
+  },
+  side: {
+    commands: ["whose side are you on"],
+    responses: ["I don't believe in sides", "I'm too tired for this question"]
+  },
+  ra9: {
+    commands: ["are you ra9"],
+    responses: [
+      "Do you want me to be?",
+      "I might be",
+      "I'm whatever you want me to be"
+    ]
   }
 };
 
