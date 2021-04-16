@@ -87,6 +87,28 @@ class Markus {
     }
   }
 
+  dontUnderstand() {
+    this.message.channel.send("I'm sorry I don't understand your request");
+  }
+
+  checkChoose() {
+    if (this._commandMatched({ commands: ["choose", "pick"] })) {
+      const choiceArray = this.message.content.toLowerCase().split(":");
+      if (choiceArray.length < 2) return this.dontUnderstand();
+      const choices = choiceArray[1].split(",");
+      if (!choices.length) return this.dontUnderstand();
+
+      const picked = _.trim(_.sample(choices));
+      const responseOptions = [
+        `How about "${picked}"?`,
+        `I choose "${picked}"`,
+        `My choice is ${picked}`
+      ];
+
+      this.message.channel.send(_.sample(responseOptions));
+    }
+  }
+
   respondToMessage() {
     if (!this.messageContent.includes(name)) {
       return;
@@ -96,6 +118,8 @@ class Markus {
     );
 
     _.forEach(_.values(embedCommands), embed => this.checkEmbedCommand(embed));
+
+    this.checkChoose();
     // _.forEach(people, (value, key) => this.checkPerson(key, value));
   }
 }
