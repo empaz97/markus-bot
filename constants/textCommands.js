@@ -1,6 +1,6 @@
 const textCommands = {
   greeting: {
-    commands: ["hello", "hi there", "howdy", "hey", "hi"],
+    commands: ["hello", "hi there", "howdy", "hey"],
     reaction: "👋",
     responses: ["Oh hello!", "Hello, how are you!", "Hey there!"]
   },
@@ -53,6 +53,18 @@ const textCommands = {
     commands: ["i love you", "ily", "love you"],
     responses: ["I love you too", "Much love"],
     reaction: "💙"
+  },
+  loveFriends: {
+    commands: ["do you love north", "do you love josh", "do you love kara"],
+    responses: ["Of course I do!", "Sometimes..."]
+  },
+  lovePartners: {
+    commands: ["do you love simon", "do you love connor"],
+    responses: [
+      "Is that even a question?",
+      "They have a special place in my heart",
+      "Yes. More than you know."
+    ]
   },
   hate: {
     commands: ["hate you", "i hate you"],

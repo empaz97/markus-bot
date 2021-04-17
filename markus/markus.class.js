@@ -68,6 +68,9 @@ class Markus {
       if (choice.description) {
         embed.setDescription(choice.description);
       }
+      if (choice.fields) {
+        embed.addFields(...choice.fields);
+      }
 
       this.message.channel.send(embed);
     }
@@ -101,8 +104,13 @@ class Markus {
       const picked = _.trim(_.sample(choices));
       const responseOptions = [
         `How about "${picked}"?`,
+        `How about "${picked}"?`,
+        `I choose "${picked}"`,
         `I choose "${picked}"`,
         `My choice is "${picked}"`,
+        `My choice is "${picked}"`,
+        `I pick "${picked}"`,
+        `I pick "${picked}"`,
         `What am I, a magic 8 ball?`
       ];
 

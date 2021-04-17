@@ -92,15 +92,39 @@ const embedCommands = {
       "what can you do",
       "how do you work",
       "docs",
-      "readme"
+      "readme",
+      "what are your commands"
     ],
     artifacts: [
       {
         title: "How to Use Markus-Bot",
         url: "https://markus-bot.readme.io/reference",
-        description: "I'm a work in progress!",
+        description: "Click the above link for a full list of commands!",
         footer:
-          "Questions? Suggestions? Message my creator LizardEm#1067 on Discord"
+          "Questions? Suggestions? Message my creator LizardEm#1067 on Discord",
+        fields: [
+          {
+            name: "Choose From a List",
+            value: "*Markus <pick or choose> : option1, option2, option3*"
+          },
+          {
+            name: "Random Quote",
+            value: `
+            Basic Triggers:
+            -*inspire me*
+            -*say something inspirational*
+            -*quote something*
+            `
+          },
+          {
+            name: "Random Piece of Art",
+            value: `Common Triggers:
+            -*show me a painting*
+            -*show me some art*
+            -*show me art*
+            `
+          }
+        ]
       }
     ]
   }
