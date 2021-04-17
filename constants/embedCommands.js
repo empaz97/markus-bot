@@ -98,7 +98,7 @@ const embedCommands = {
     artifacts: [
       {
         title: "How to Use Markus-Bot",
-        url: "https://markus-bot.readme.io/reference",
+        url: "https://github.com/empaz97/markus-bot/blob/main/README.md",
         description: "Click the above link for a full list of commands!",
         footer:
           "Questions? Suggestions? Message my creator LizardEm#1067 on Discord",

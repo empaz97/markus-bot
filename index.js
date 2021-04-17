@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const Markus = require("./markus/markus.class");
 
 const bot = new Discord.Client();
-const token = "ODMxOTczNjA0NjEwNDA4NTA4.YHdBzA.ddWGxQbMCbnrrWREL3gCvVNZlHU";
+const token = process.env.BOT_TOKEN;
 
 bot.on("ready", () => {
   console.log("bot is ready");
