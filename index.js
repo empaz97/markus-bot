@@ -10,7 +10,7 @@ bot.on("ready", () => {
 
 bot.on("message", function(message) {
   if (message.author.bot) return;
-  markusBot = new Markus(message);
+  markusBot = new Markus(message, bot);
 
   markusBot.respondToMessage();
 });

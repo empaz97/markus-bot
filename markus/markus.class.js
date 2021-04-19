@@ -1,13 +1,15 @@
 const _ = require("lodash");
 const Discord = require("discord.js");
 
-const baseConstants = requre("../constants/base");
+const baseConstants = require("../constants/base");
 const textCommands = require("../constants/textCommands");
 const embedCommands = require("../constants/embedCommands");
+const mentionCommands = require("../constants/mentionCommands");
 
 class Markus {
-  constructor(message) {
+  constructor(message, client) {
     this._matched = false;
+    this.client = client;
     this.message = message;
     this.messageContent = message.content
       .toLowerCase()
@@ -27,6 +29,15 @@ class Markus {
         this.messageContent.includes(`${command} ${baseConstants.name}`)
       );
     });
+  }
+
+  _getUser(command) {
+    const matches = command.match(/ <@!?(\d+)>$/);
+    if (!matches) return false;
+
+    const id = matches[1];
+
+    return this.client.users.cache.get(id);
   }
 
   checkTextCommand(commandInfo) {
@@ -119,6 +130,16 @@ class Markus {
     return true;
   }
 
+  checkMention(mentionInfo) {
+    if (this._commandMatched(mentionInfo)) {
+      const user = this._getUser(this.message.content);
+      if (!user) return true;
+
+      var compiled = _.template(_.sample(mentionInfo.responses));
+      this.message.channel.send(compiled({ user: user.toString() }));
+    }
+  }
+
   respondToMessage() {
     if (!this.messageContent.includes(baseConstants.name)) {
       return;
@@ -132,6 +153,9 @@ class Markus {
     if (this._matched) return;
 
     this.checkChoose();
+    if (this._matched) return;
+
+    _.forEach(_.values(mentionCommands), mention => this.checkMention(mention));
   }
 }
 
