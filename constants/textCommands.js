@@ -71,7 +71,12 @@ const textCommands = {
     responses: ["Of course I do!", "Sometimes..."]
   },
   loveEnemies: {
-    commands: ["do you love gavin", "do you love perkins"],
+    commands: [
+      "do you love gavin",
+      "do you love perkins",
+      "do you love kamski",
+      "do you love amanda"
+    ],
     responses: ["Is this a joke?", "No."]
   },
   lovePartners: {
@@ -82,6 +87,10 @@ const textCommands = {
       "Yes. More than you know.",
       "Why? Did he say something to you?"
     ]
+  },
+  loveFamily: {
+    commands: ["do you love carl"],
+    responses: ["Yes. With my whole heart. Always and forever."]
   },
   hate: {
     commands: ["hate you", "i hate you", "you suck", "you stink"],
