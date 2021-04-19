@@ -81,7 +81,8 @@ const textCommands = {
       "No thanks.",
       "There's no reason to be mean",
       "Hatred will get you nowhere",
-      "Wow. Buy me dinner first"
+      "Wow. Buy me dinner first.",
+      "Rather forward, aren't we?"
     ]
   },
   alert: {
