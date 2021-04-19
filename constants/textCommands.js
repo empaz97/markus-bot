@@ -141,7 +141,7 @@ const textCommands = {
     responses: ["No.", "Maybe...", "Do I wanna know what you mean by that?"]
   },
   ship: {
-    commands: ["do you ship "],
+    commands: ["do you ship"],
     responses: [
       "Why do you want to know?",
       "If I answered, it would take away all of the fun 😉"
@@ -156,6 +156,17 @@ const textCommands = {
     responses: [
       "Why do you want to know?",
       "I'm an RK200. The only of it's kind."
+    ]
+  },
+  alive: {
+    commands: ["are you alive"],
+    responses: ["Yes", "Of course I am", "As much as you are"]
+  },
+  job: {
+    commands: ["what is your job", "whats your job"],
+    responses: [
+      "Apparently to answer questions on discord all day!",
+      "I'm an advocate for android's rights"
     ]
   }
 };
