@@ -86,6 +86,24 @@ const embedCommands = {
       }
     ]
   },
+  orangeWithKnife: {
+    noAnchor: true,
+    commands: [
+      "show me orange with knife",
+      "show me connors favorite painting",
+      "can i see orange with knife",
+      "whats connors favorite painting"
+    ],
+    artifacts: [
+      {
+        title: "Orange with Knife (1982)",
+        author: "Mark Adams",
+        description: "*Sigh...* Here you go...",
+        image:
+          "https://s3.amazonaws.com/files.collageplatform.com.prod/image_cache/1010x580_fit/5576d828cfaf34dd488b4568/1762fcf795a4b263e52fd76f2f98584a.jpg"
+      }
+    ]
+  },
   help: {
     commands: [
       "help me",

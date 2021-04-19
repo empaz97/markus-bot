@@ -14,7 +14,8 @@ const mentionCommands = {
   cheer: {
     commands: ["cheer up", "can you cheer up", "go cheer up"],
     responses: [
-      "<%= user %> 💙 https://tenor.com/view/milk-and-mocha-hug-cute-kawaii-love-gif-12535134"
+      `<%= user %> 💙
+      https://tenor.com/view/milk-and-mocha-hug-cute-kawaii-love-gif-12535134`
     ]
   }
 };

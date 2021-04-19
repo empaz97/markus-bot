@@ -135,6 +135,28 @@ const textCommands = {
       "You tell me",
       "https://tenor.com/view/carla-shaw-friends-disappoint-gif-3531418"
     ]
+  },
+  clown: {
+    commands: ["are you down to clown"],
+    responses: ["No.", "Maybe...", "Do I wanna know what you mean by that?"]
+  },
+  ship: {
+    commands: ["do you ship "],
+    responses: [
+      "Why do you want to know?",
+      "If I answered, it would take away all of the fun 😉"
+    ]
+  },
+  from: {
+    commands: ["wherere you from", "where are you from"],
+    responses: ["Detroit, of course", "Do you mean physically, or spiritually?"]
+  },
+  model: {
+    commands: ["whats your model", "what model are you"],
+    responses: [
+      "Why do you want to know?",
+      "I'm an RK200. The only of it's kind."
+    ]
   }
 };
 
