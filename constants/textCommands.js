@@ -59,6 +59,10 @@ const textCommands = {
     responses: ["I love you too", "Much love"],
     reaction: "💙"
   },
+  loveGeneral: {
+    commands: ["do you love allen", "do you love chris"],
+    responses: ["Unfortunately, I don't know them very well"]
+  },
   loveFriends: {
     commands: [
       "do you love north",
@@ -66,7 +70,14 @@ const textCommands = {
       "do you love kara",
       "do you love alice",
       "do you love nines",
-      "do you love rk900"
+      "do you love rk900",
+      "do you love ralph",
+      "do you love jerry",
+      "do you love the jerries",
+      "do you love the jerrys",
+      "do you love luther",
+      "do you love tina",
+      "do you love sumo"
     ],
     responses: ["Of course I do!", "Sometimes..."]
   },
@@ -75,9 +86,14 @@ const textCommands = {
       "do you love gavin",
       "do you love perkins",
       "do you love kamski",
+      "do you love elijah",
       "do you love amanda"
     ],
     responses: ["Is this a joke?", "No."]
+  },
+  loveComplicated: {
+    commands: ["do you love cyberlife", "do you love leo"],
+    responses: ["This is... a difficult question"]
   },
   lovePartners: {
     commands: ["do you love simon", "do you love connor"],
