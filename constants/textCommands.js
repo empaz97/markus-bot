@@ -60,15 +60,27 @@ const textCommands = {
     reaction: "💙"
   },
   loveFriends: {
-    commands: ["do you love north", "do you love josh", "do you love kara"],
+    commands: [
+      "do you love north",
+      "do you love josh",
+      "do you love kara",
+      "do you love alice",
+      "do you love nines",
+      "do you love rk900"
+    ],
     responses: ["Of course I do!", "Sometimes..."]
+  },
+  loveEnemies: {
+    commands: ["do you love gavin", "do you love perkins"],
+    responses: ["Is this a joke?", "No."]
   },
   lovePartners: {
     commands: ["do you love simon", "do you love connor"],
     responses: [
       "Is that even a question?",
       "They have a special place in my heart",
-      "Yes. More than you know."
+      "Yes. More than you know.",
+      "Why? Did he say something to you?"
     ]
   },
   hate: {
