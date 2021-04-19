@@ -76,10 +76,16 @@ const textCommands = {
       "do you love the jerries",
       "do you love the jerrys",
       "do you love luther",
-      "do you love tina",
-      "do you love sumo"
+      "do you love tina"
     ],
     responses: ["Of course I do!", "Sometimes..."]
+  },
+  loveSumo: {
+    commands: ["do you love sumo"],
+    responses: [
+      "Of course I do! He is the best boy!",
+      "I don't trust anyone who *doesn't* love Sumo!"
+    ]
   },
   loveEnemies: {
     commands: [
