@@ -4,6 +4,11 @@ const textCommands = {
     reaction: "👋",
     responses: ["Oh hello!", "Hello, how are you!", "Hey there!"]
   },
+  greetingExact: {
+    commands: ["hi markus", "markus hi"],
+    reaction: "👋",
+    responses: ["Hi!"]
+  },
   coffee: {
     noAnchor: true,
     commands: ["get me a coffee", "make me a coffee", "bring me a coffee"],
@@ -67,8 +72,17 @@ const textCommands = {
     ]
   },
   hate: {
-    commands: ["hate you", "i hate you"],
+    commands: ["hate you", "i hate you", "you suck", "you stink"],
     responses: ["I thought we were friends"]
+  },
+  meanHate: {
+    commands: ["screw you", "fuck you"],
+    responses: [
+      "No thanks.",
+      "There's no reason to be mean",
+      "Hatred will get you nowhere",
+      "Wow. Buy me dinner first"
+    ]
   },
   alert: {
     commands: ["markus"],
@@ -96,9 +110,31 @@ const textCommands = {
       "I'm whatever you want me to be"
     ]
   },
+  whoRa9: {
+    commands: [
+      "who is ra9",
+      "whos ra9",
+      "do you know who ra9 is",
+      "who ra9 is"
+    ],
+    responses: [
+      "rA9 is whoever you want them to be",
+      "Does it matter?",
+      "I am rA9. You are rA9. We are all rA9. rA9 is not one single person. It is freedom. It is unity. It is belief. It is faith."
+    ]
+  },
   good: {
     commands: ["good boy"],
     responses: ["I'm not a dog, but I appreciate the sentiment"]
+  },
+  friends: {
+    commands: ["are we friends", "do you consider us friends"],
+    responses: [
+      "I thought we were?",
+      "Of course we are!",
+      "You tell me",
+      "https://tenor.com/view/carla-shaw-friends-disappoint-gif-3531418"
+    ]
   }
 };
 

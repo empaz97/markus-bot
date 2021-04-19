@@ -1,17 +1,17 @@
 const _ = require("lodash");
 const Discord = require("discord.js");
 
+const baseConstants = requre("../constants/base");
 const textCommands = require("../constants/textCommands");
 const embedCommands = require("../constants/embedCommands");
-const name = "markus";
-const punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
 
 class Markus {
   constructor(message) {
+    this._matched = false;
     this.message = message;
     this.messageContent = message.content
       .toLowerCase()
-      .replace(punctuationRegex, "");
+      .replace(baseConstants.punctuationRegex, "");
   }
 
   _commandMatched(commandInfo) {
@@ -23,8 +23,8 @@ class Markus {
         return this.messageContent.includes(command);
       }
       return (
-        this.messageContent.includes(`${name} ${command}`) ||
-        this.messageContent.includes(`${command} ${name}`)
+        this.messageContent.includes(`${baseConstants.name} ${command}`) ||
+        this.messageContent.includes(`${command} ${baseConstants.name}`)
       );
     });
   }
@@ -43,6 +43,7 @@ class Markus {
         this.message.channel.send(_.sample(commandInfo.responses));
       }
       // matched
+      this._matched = true;
       return false;
     }
     // not matched
@@ -73,21 +74,13 @@ class Markus {
       }
 
       this.message.channel.send(embed);
-    }
-  }
+      this._matched = true;
 
-  checkPerson(name, personInfo) {
-    if (
-      this.messageContent.includes(`how is ${name}`) ||
-      this.messageContent.includes(`hows ${name}`)
-    ) {
-      this.message.channel.send(_.sample(personInfo.how));
-    } else if (
-      this.messageContent.includes(`where is ${name}`) ||
-      this.messageContent.includes(`wheres ${name}`)
-    ) {
-      this.message.channel.send(_.sample(personInfo.where));
+      // matched
+      return false;
     }
+    // not matched
+    return true;
   }
 
   dontUnderstand() {
@@ -115,21 +108,30 @@ class Markus {
       ];
 
       this.message.channel.send(_.sample(responseOptions));
+
+      this._matched = true;
+
+      // matched
+      return false;
     }
+
+    // not matched
+    return true;
   }
 
   respondToMessage() {
-    if (!this.messageContent.includes(name)) {
+    if (!this.messageContent.includes(baseConstants.name)) {
       return;
     }
     _.forEach(_.values(textCommands), command =>
       this.checkTextCommand(command)
     );
+    if (this._matched) return;
 
     _.forEach(_.values(embedCommands), embed => this.checkEmbedCommand(embed));
+    if (this._matched) return;
 
     this.checkChoose();
-    // _.forEach(people, (value, key) => this.checkPerson(key, value));
   }
 }
 
