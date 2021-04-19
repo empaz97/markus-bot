@@ -32,7 +32,7 @@ class Markus {
   }
 
   _getUser(command) {
-    const matches = command.match(/ <@!?(\d+)>$/);
+    const matches = command.match(/ <@!?(\d+)>/);
     if (!matches) return false;
 
     const id = matches[1];
