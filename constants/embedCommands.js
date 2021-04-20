@@ -1,3 +1,33 @@
+const helpArtifact = {
+  title: "How to Use Markus-Bot",
+  url: "https://github.com/empaz97/markus-bot/blob/main/README.md",
+  description: "Click the above link for a full list of commands!",
+  footer: "Questions? Suggestions? Message my creator LizardEm#1067 on Discord",
+  fields: [
+    {
+      name: "Choose From a List",
+      value: "*Markus <pick or choose> : option1, option2, option3*"
+    },
+    {
+      name: "Random Quote",
+      value: `
+      Basic Triggers:
+      -*inspire me*
+      -*say something inspirational*
+      -*quote something*
+      `
+    },
+    {
+      name: "Random Piece of Art",
+      value: `Common Triggers:
+      -*show me a painting*
+      -*show me some art*
+      -*show me art*
+      `
+    }
+  ]
+};
+
 const embedCommands = {
   paintings: {
     noAnchor: true,
@@ -111,40 +141,15 @@ const embedCommands = {
       "how do you work",
       "docs",
       "readme",
-      "what are your commands"
+      "what are your commands",
+      "your prompts",
+      "!help"
     ],
-    artifacts: [
-      {
-        title: "How to Use Markus-Bot",
-        url: "https://github.com/empaz97/markus-bot/blob/main/README.md",
-        description: "Click the above link for a full list of commands!",
-        footer:
-          "Questions? Suggestions? Message my creator LizardEm#1067 on Discord",
-        fields: [
-          {
-            name: "Choose From a List",
-            value: "*Markus <pick or choose> : option1, option2, option3*"
-          },
-          {
-            name: "Random Quote",
-            value: `
-            Basic Triggers:
-            -*inspire me*
-            -*say something inspirational*
-            -*quote something*
-            `
-          },
-          {
-            name: "Random Piece of Art",
-            value: `Common Triggers:
-            -*show me a painting*
-            -*show me some art*
-            -*show me art*
-            `
-          }
-        ]
-      }
-    ]
+    artifacts: [helpArtifact]
+  },
+  helpExact: {
+    commands: ["markus help"],
+    artifacts: [helpArtifact]
   }
 };
 

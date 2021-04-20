@@ -78,7 +78,7 @@ const textCommands = {
       "do you love luther",
       "do you love tina"
     ],
-    responses: ["Of course I do!", "Sometimes..."]
+    responses: ["I do very much", "Of course I do!", "Sometimes..."]
   },
   loveSumo: {
     commands: ["do you love sumo"],
@@ -205,6 +205,10 @@ const textCommands = {
   alive: {
     commands: ["are you alive"],
     responses: ["Yes", "Of course I am", "As much as you are"]
+  },
+  deviant: {
+    commands: ["are you deviant", "are you a deviant"],
+    responses: ["Yes", "Maybe..."]
   },
   job: {
     commands: ["what is your job", "whats your job"],
