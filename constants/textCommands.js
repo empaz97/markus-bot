@@ -7,7 +7,8 @@ const textCommands = {
   greetingExact: {
     commands: ["hi markus", "markus hi"],
     reaction: "👋",
-    responses: ["Hi!"]
+    responses: ["Hi!"],
+    exact: true
   },
   coffee: {
     noAnchor: true,

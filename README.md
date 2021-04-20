@@ -18,6 +18,7 @@
     responses: ["Oh hello!", "Hello, how are you!", "Hey there!"]
   },
   greetingExact: {
+    exact: true,
     commands: ["hi markus", "markus hi"],
     reaction: "👋",
     responses: ["Hi!"]

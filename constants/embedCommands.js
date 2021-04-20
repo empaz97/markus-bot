@@ -149,6 +149,7 @@ const embedCommands = {
   },
   helpExact: {
     commands: ["markus help"],
+    exact: true,
     artifacts: [helpArtifact]
   }
 };
