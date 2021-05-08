@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
+  "name": "markus-bot",
   "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "description": "Markus Bot for Discord",
   "engines": {
     "node": "14.x"
   },
@@ -14,7 +14,9 @@
     "discord.js": "^12.5.3",
     "ejs": "^3.1.5",
     "express": "^4.15.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "pg": "^8.6.0"
   },
   "devDependencies": {
     "got": "^11.3.0",
@@ -28,6 +30,5 @@
     "node",
     "heroku",
     "express"
-  ],
-  "license": "MIT"
+  ]
 }

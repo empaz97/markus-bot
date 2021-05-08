@@ -1,15 +1,18 @@
 const _ = require("lodash");
 const Discord = require("discord.js");
+const moment = require("moment");
 
 const baseConstants = require("../constants/base");
 const textCommands = require("../constants/textCommands");
 const embedCommands = require("../constants/embedCommands");
 const mentionCommands = require("../constants/mentionCommands");
+const otherCommands = require("../constants/otherCommands");
 
 class Markus {
-  constructor(message, client) {
+  constructor(message, client, db) {
     this._matched = false;
     this.client = client;
+    this.db = db;
     this.message = message;
     this.messageContent = message.content
       .toLowerCase()
@@ -137,6 +140,57 @@ class Markus {
 
       var compiled = _.template(_.sample(mentionInfo.responses));
       this.message.channel.send(compiled({ user: user.toString() }));
+      this._matched = true;
+    }
+  }
+
+  fetchCannibals() {
+    const query = `SELECT * FROM cannibal WHERE server='${this.message.guild.id}' ORDER BY mention DESC`;
+    this.db
+      .query(query)
+      .then(res => {
+        if (!res.rowCount) {
+          this.message.channel.send(
+            "There have been no cannibal incidents in this server!"
+          );
+        } else {
+          const daysSince = moment().diff(moment(res.rows[0].mention), "days");
+          this.message.channel.send(
+            `Days since last cannibal incident: ${daysSince}\nTotal cannibal incidents: ${res.rowCount}`
+          );
+        }
+      })
+      .catch(e => {
+        console.error(`Error updating cannibal entries: "${query}"`);
+        console.error(e.stack);
+      });
+  }
+
+  updateCannibals() {
+    const query = `INSERT INTO cannibal(server, mention) VALUES('${this.message.guild.id}', NOW())`;
+    this.db
+      .query(query)
+      .then(() => this.fetchCannibals())
+      .catch(e => {
+        console.error(`Error updating cannibal entry: "${query}"`);
+        console.error(e.stack);
+      });
+  }
+
+  checkCannibals() {
+    if (
+      this._commandMatched({ commands: otherCommands.cannibalCommands.update })
+    ) {
+      this.updateCannibals();
+      this._matched = true;
+      return;
+    }
+
+    if (
+      this._commandMatched({ commands: otherCommands.cannibalCommands.fetch })
+    ) {
+      this.fetchCannibals();
+      this._matched = true;
     }
   }
 
@@ -156,6 +210,10 @@ class Markus {
     if (this._matched) return;
 
     _.forEach(_.values(mentionCommands), mention => this.checkMention(mention));
+    if (this._matched) return;
+
+    this.checkCannibals();
+    if (this._matched) return;
   }
 }
 
