@@ -154,9 +154,9 @@ class Markus {
             "There have been no cannibal incidents in this server!"
           );
         } else {
-          const daysSince = moment().diff(moment(res.rows[0].mention), "days");
+          const timeSince = moment(res.rows[0].mention).fromNow(true);
           this.message.channel.send(
-            `Days since last cannibal incident: ${daysSince}\nTotal cannibal incidents: ${res.rowCount}`
+            `Time since last cannibal incident: ${timeSince}\nTotal cannibal incidents: ${res.rowCount}`
           );
         }
       })
