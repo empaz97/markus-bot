@@ -19,6 +19,10 @@ class Markus {
       .replace(baseConstants.punctuationRegex, "");
   }
 
+  _send(content) {
+    this.message.channel.send(content);
+  }
+
   _commandMatched(commandInfo) {
     return commandInfo.commands.some(command => {
       if (commandInfo.exact) {
@@ -51,10 +55,10 @@ class Markus {
 
       if (commandInfo.niceResponses && this.messageContent.includes("please")) {
         // send a random nice response
-        this.message.channel.send(_.sample(commandInfo.niceResponses));
+        this._send(_.sample(commandInfo.niceResponses));
       } else {
         // send a random response
-        this.message.channel.send(_.sample(commandInfo.responses));
+        this._send(_.sample(commandInfo.responses));
       }
       // matched
       this._matched = true;
@@ -87,7 +91,7 @@ class Markus {
         embed.addFields(...choice.fields);
       }
 
-      this.message.channel.send(embed);
+      this._send(embed);
       this._matched = true;
 
       // matched
@@ -98,7 +102,15 @@ class Markus {
   }
 
   dontUnderstand() {
-    this.message.channel.send("I'm sorry I don't understand your request");
+    this._send("I'm sorry I don't understand your request");
+  }
+
+  guildRequired() {
+    this._send("I'm sorry this command can only be used in a server");
+  }
+
+  permissionRequired() {
+    this._send("I'm sorry you must be an administrator to use this command");
   }
 
   checkChoose() {
@@ -111,17 +123,20 @@ class Markus {
       const picked = _.trim(_.sample(choices));
       const responseOptions = [
         `How about "${picked}"?`,
-        `How about "${picked}"?`,
-        `I choose "${picked}"`,
         `I choose "${picked}"`,
         `My choice is "${picked}"`,
-        `My choice is "${picked}"`,
-        `I pick "${picked}"`,
-        `I pick "${picked}"`,
-        `What am I, a magic 8 ball?`
+        `I pick "${picked}"`
       ];
 
-      this.message.channel.send(_.sample(responseOptions));
+      this._send(
+        _.sample([
+          ...responseOptions,
+          ...responseOptions,
+          ...responseOptions,
+          ...responseOptions,
+          "What am I, a magic 8 ball?"
+        ])
+      );
 
       this._matched = true;
 
@@ -139,23 +154,25 @@ class Markus {
       if (!user) return true;
 
       var compiled = _.template(_.sample(mentionInfo.responses));
-      this.message.channel.send(compiled({ user: user.toString() }));
+      this._send(compiled({ user: user.toString() }));
       this._matched = true;
     }
   }
 
   fetchCannibals() {
+    if (!this.message.guild) {
+      this.guildRequired();
+      return;
+    }
     const query = `SELECT * FROM cannibal WHERE server='${this.message.guild.id}' ORDER BY mention DESC`;
     this.db
       .query(query)
       .then(res => {
         if (!res.rowCount) {
-          this.message.channel.send(
-            "There have been no cannibal incidents in this server!"
-          );
+          this._send("There have been no cannibal incidents in this server!");
         } else {
           const timeSince = moment(res.rows[0].mention).fromNow(true);
-          this.message.channel.send(
+          this._send(
             `Time since last cannibal incident: ${timeSince}\nTotal cannibal incidents: ${res.rowCount}`
           );
         }
@@ -167,6 +184,10 @@ class Markus {
   }
 
   updateCannibals() {
+    if (!this.message.guild) {
+      this.guildRequired();
+      return;
+    }
     const query = `INSERT INTO cannibal(server, mention) VALUES('${this.message.guild.id}', NOW())`;
     this.db
       .query(query)
@@ -177,7 +198,33 @@ class Markus {
       });
   }
 
+  clearCannibals() {
+    const query = `DELETE FROM cannibal WHERE server='${this.message.guild.id}'`;
+    this.db
+      .query(query)
+      .then(() => this.fetchCannibals())
+      .catch(e => {
+        console.error(`Error clearing cannibal entry: "${query}"`);
+        console.error(e.stack);
+      });
+  }
+
   checkCannibals() {
+    if (
+      this._commandMatched({ commands: otherCommands.cannibalCommands.clear })
+    ) {
+      if (!this.message.guild) {
+        this.guildRequired();
+      } else if (!this.message.member.hasPermission("ADMINISTRATOR")) {
+        this.permissionRequired();
+      } else {
+        this.clearCannibals();
+      }
+
+      this._matched = true;
+      return;
+    }
+
     if (
       this._commandMatched({ commands: otherCommands.cannibalCommands.update })
     ) {
