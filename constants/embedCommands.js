@@ -28,6 +28,19 @@ const helpArtifact = {
   ]
 };
 
+const updateArtifact = {
+  title: "Markus-Bot Updates",
+  url: "https://github.com/empaz97/markus-bot/blob/main/docs/releaseLog.md",
+  description: "Click the above link for a full release log!",
+  footer: "Questions? Suggestions? Message my creator LizardEm#1067 on Discord",
+  fields: [
+    {
+      name: "Updates",
+      value: "Coming Soon"
+    }
+  ]
+};
+
 const embedCommands = {
   paintings: {
     noAnchor: true,
@@ -151,6 +164,14 @@ const embedCommands = {
     commands: ["markus help"],
     exact: true,
     artifacts: [helpArtifact]
+  },
+  updates: {
+    commands: [
+      "whats new",
+      "do you have any updates",
+      "can you do anything new"
+    ],
+    artifacts: [updateArtifact]
   }
 };
 
