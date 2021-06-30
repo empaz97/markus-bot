@@ -2,21 +2,27 @@ const _ = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 
+const DatabaseHelper = require("./databaseHelper.class");
+
 const baseConstants = require("../constants/base");
 const textCommands = require("../constants/textCommands");
 const embedCommands = require("../constants/embedCommands");
 const mentionCommands = require("../constants/mentionCommands");
-const otherCommands = require("../constants/otherCommands");
+const databaseCommands = require("../constants/databaseCommands");
 
 class Markus {
   constructor(message, client, db) {
     this._matched = false;
     this.client = client;
-    this.db = db;
+    this.db = new DatabaseHelper(db);
     this.message = message;
     this.messageContent = message.content
       .toLowerCase()
       .replace(baseConstants.punctuationRegex, "");
+  }
+
+  _send(content) {
+    this.message.channel.send(content);
   }
 
   _commandMatched(commandInfo) {
@@ -51,10 +57,10 @@ class Markus {
 
       if (commandInfo.niceResponses && this.messageContent.includes("please")) {
         // send a random nice response
-        this.message.channel.send(_.sample(commandInfo.niceResponses));
+        this._send(_.sample(commandInfo.niceResponses));
       } else {
         // send a random response
-        this.message.channel.send(_.sample(commandInfo.responses));
+        this._send(_.sample(commandInfo.responses));
       }
       // matched
       this._matched = true;
@@ -87,7 +93,7 @@ class Markus {
         embed.addFields(...choice.fields);
       }
 
-      this.message.channel.send(embed);
+      this._send(embed);
       this._matched = true;
 
       // matched
@@ -98,7 +104,15 @@ class Markus {
   }
 
   dontUnderstand() {
-    this.message.channel.send("I'm sorry I don't understand your request");
+    this._send("I'm sorry I don't understand your request");
+  }
+
+  guildRequired() {
+    this._send("I'm sorry this command can only be used in a server");
+  }
+
+  permissionRequired() {
+    this._send("I'm sorry you must be an administrator to use this command");
   }
 
   checkChoose() {
@@ -111,17 +125,20 @@ class Markus {
       const picked = _.trim(_.sample(choices));
       const responseOptions = [
         `How about "${picked}"?`,
-        `How about "${picked}"?`,
-        `I choose "${picked}"`,
         `I choose "${picked}"`,
         `My choice is "${picked}"`,
-        `My choice is "${picked}"`,
-        `I pick "${picked}"`,
-        `I pick "${picked}"`,
-        `What am I, a magic 8 ball?`
+        `I pick "${picked}"`
       ];
 
-      this.message.channel.send(_.sample(responseOptions));
+      this._send(
+        _.sample([
+          ...responseOptions,
+          ...responseOptions,
+          ...responseOptions,
+          ...responseOptions,
+          "What am I, a magic 8 ball?"
+        ])
+      );
 
       this._matched = true;
 
@@ -139,47 +156,140 @@ class Markus {
       if (!user) return true;
 
       var compiled = _.template(_.sample(mentionInfo.responses));
-      this.message.channel.send(compiled({ user: user.toString() }));
+      this._send(compiled({ user: user.toString() }));
       this._matched = true;
     }
   }
 
   fetchCannibals() {
-    const query = `SELECT * FROM cannibal WHERE server='${this.message.guild.id}' ORDER BY mention DESC`;
+    if (!this.message.guild) {
+      this.guildRequired();
+      return;
+    }
     this.db
-      .query(query)
+      .fetchCannibals(this.message.guild.id)
       .then(res => {
         if (!res.rowCount) {
-          this.message.channel.send(
-            "There have been no cannibal incidents in this server!"
-          );
+          this._send("There have been no cannibal incidents in this server!");
         } else {
           const timeSince = moment(res.rows[0].mention).fromNow(true);
-          this.message.channel.send(
+          this._send(
             `Time since last cannibal incident: ${timeSince}\nTotal cannibal incidents: ${res.rowCount}`
           );
         }
       })
-      .catch(e => {
-        console.error(`Error updating cannibal entries: "${query}"`);
-        console.error(e.stack);
-      });
+      .catch(e => this._send(e.message));
   }
 
   updateCannibals() {
-    const query = `INSERT INTO cannibal(server, mention) VALUES('${this.message.guild.id}', NOW())`;
+    if (!this.message.guild) {
+      this.guildRequired();
+      return;
+    }
     this.db
-      .query(query)
+      .updateCannibals(this.message.guild.id)
       .then(() => this.fetchCannibals())
-      .catch(e => {
-        console.error(`Error updating cannibal entry: "${query}"`);
-        console.error(e.stack);
-      });
+      .catch(e => this._send(e.message));
+  }
+
+  clearCannibals() {
+    this.db
+      .clearCannibals(this.message.guild.id)
+      .then(() => this.fetchCannibals())
+      .catch(e => this._send(e.message));
+  }
+
+  formatWips(wipResults) {
+    if (!wipResults.rowCount) {
+      this._send("You have no wips");
+      return;
+    }
+    let msg = "Here is a list of your wips:\n";
+    wipResults.rows.forEach(wip => {
+      msg += `- ${wip.name}`;
+      if (wip.summary) {
+        msg += ` (*${wip.summary}*)`;
+      }
+      msg += "\n";
+    });
+    this._send(msg);
+  }
+
+  fetchWips() {
+    this.db
+      .fetchWips(this.message.author.id)
+      .then(res => this.formatWips(res))
+      .catch(e => this._send(e.message));
+  }
+
+  fetchCompleteWips() {
+    this.db
+      .fetchWips(this.message.author.id, true, true)
+      .then(res => this.formatWips(res))
+      .catch(e => this._send(e.message));
+  }
+
+  addWip(parts) {
+    // TODO: more error checking
+    this.db
+      .addWip(this.message.author.id, parts.name, parts.summary)
+      .then(() => this._send("Wip successfully added to your wip list!"))
+      .catch(e => this._send(e.message));
+  }
+
+  updateWip(parts) {
+    // TODO: more error checking
+    this.db
+      .updateWip(this.message.author.id, parts.name, parts.summary)
+      .then(() => this._send("Wip successfully updated!"))
+      .catch(e => this._send(e.message));
+  }
+
+  removeWip(parts) {
+    // TODO: more error checking
+    this.db
+      .addWip(this.message.author.id, parts.name)
+      .then(() => this._send("Wip successfully removed from your wip list!"))
+      .catch(e => this._send(e.message));
+  }
+
+  completeWip(parts) {
+    // TODO: more error checking
+    this.db
+      .completeWip(this.message.author.id, parts.name)
+      .then(() => this._send("Wip successfully marked as completed! Congrats!"))
+      .catch(e => this._send(e.message));
+  }
+
+  clearWips() {
+    this.db
+      .clearWips(this.message.author.id)
+      .then(() => this._send("Wip list successfully cleared!"))
+      .catch(e => this._send(e.message));
   }
 
   checkCannibals() {
     if (
-      this._commandMatched({ commands: otherCommands.cannibalCommands.update })
+      this._commandMatched({
+        commands: databaseCommands.cannibalCommands.clear
+      })
+    ) {
+      if (!this.message.guild) {
+        this.guildRequired();
+      } else if (!this.message.member.hasPermission("ADMINISTRATOR")) {
+        this.permissionRequired();
+      } else {
+        this.clearCannibals();
+      }
+
+      this._matched = true;
+      return;
+    }
+
+    if (
+      this._commandMatched({
+        commands: databaseCommands.cannibalCommands.update
+      })
     ) {
       this.updateCannibals();
       this._matched = true;
@@ -187,11 +297,38 @@ class Markus {
     }
 
     if (
-      this._commandMatched({ commands: otherCommands.cannibalCommands.fetch })
+      this._commandMatched({
+        commands: databaseCommands.cannibalCommands.fetch
+      })
     ) {
       this.fetchCannibals();
       this._matched = true;
     }
+  }
+
+  checkWips() {
+    _.forEach(databaseCommands.wipCommands, command => {
+      if (this._commandMatched(command)) {
+        const actionMethod = _.bind(_.get(this, command.method), this);
+        // get the relevant function based on key and call it
+        if (command.hasParts) {
+          // TODO: parse parts
+          const parts = this.message.content.split(":");
+          if (parts.length < 2) {
+            this._send("Sorry, you must include a name for your wip!");
+          } else {
+            const name = parts[1].trim();
+            let summary = _.get(parts, "[2]");
+            if (summary) summary = summary.trim();
+            actionMethod({ name, summary });
+          }
+        } else {
+          actionMethod();
+        }
+        this._matched = true;
+        return false;
+      }
+    });
   }
 
   respondToMessage() {
@@ -213,6 +350,9 @@ class Markus {
     if (this._matched) return;
 
     this.checkCannibals();
+    if (this._matched) return;
+
+    this.checkWips();
     if (this._matched) return;
   }
 }
