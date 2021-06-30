@@ -1,8 +1,10 @@
+const footer =
+  "Questions? Suggestions? Message my creator LizardEm#1067 on Discord";
 const helpArtifact = {
   title: "How to Use Markus-Bot",
   url: "https://github.com/empaz97/markus-bot/blob/main/README.md",
   description: "Click the above link for a full list of commands!",
-  footer: "Questions? Suggestions? Message my creator LizardEm#1067 on Discord",
+  footer,
   fields: [
     {
       name: "Choose From a List",
@@ -24,6 +26,75 @@ const helpArtifact = {
       -*show me some art*
       -*show me art*
       `
+    }
+  ]
+};
+
+const wipHelpArtifact = {
+  title: "How to Use Markus' Wip Tracker",
+  footer,
+  fields: [
+    {
+      name: "Adding a wip",
+      value: `
+      - \`markus <command> : <wip_name> : <wip_summary>\`
+      - The summary is optional
+      - Adding commands: ["new wip", "add new wip", "add wip",  "add a wip", "add a new wip", "add to my wips"]
+      - Example: \`markus add a wip : Gator!Nines : Nines is a gator\`
+      - Example: \`markus new wip: ffbb\`
+      `
+    },
+    {
+      name: "Updating a wip's summary",
+      value: `
+ - \`markus <command> : <wip_name> : <wip_summary>\`
+ - You must already have a wip with this name for it to work
+ - Updating commands: ["update wip", "update a wip", "update my wip"]
+ - Example: \`markus update wip: ffbb : Connor is aroace\`
+
+`
+    },
+    {
+      name: "Fetching current wips",
+      value: `
+ - \`markus <command>\`
+ - Fetching commands: ["fetch my wips", "get my wips", "what do i have in progress", "show me my wips"]
+ `
+    },
+    {
+      name: "Fetching complete wips",
+      value: `
+ - \`markus <command>\`
+ - Fetching complete commands: ["fetch my finished wips", "fetch my completed wips", "show me my finished wips", "show me my completed wips", "what wips have i finished", "what wips have i completed"]
+ `
+    },
+    {
+      name: "Marking a wip as complete",
+      value: `
+ - \`markus <command> : <wip_name>\`
+ - You must already have a wip with this name for it to work
+ - Updating commands: ["mark a wip as finished", "mark a wip as complete", "mark wip as finished", "mark wip as complete"]
+ - Example: \`markus mark wip as complete : ffbb\`
+`
+    },
+    {
+      name: "Removing a wip",
+      value: `
+ - \`markus <command> : <wip_name>\`
+ - You must already have a wip with this name for it to work
+ - Removal commands: ["remove wip", "delete wip"]
+ - Example: \`markus delete wip : ffbb\`
+ - NOTE: this doesnt permanently delete your wip from Markus' db. In the future I'm going to give him a way to recover deleted wips!
+ `
+    },
+    {
+      name: "Clearing your wip list",
+      value: `
+ - \`markus <command>\`
+ - Removal commands: ["clear my wips", "clear wips", "clear works in progress"]
+ - Only clears your currently in-progress wips. Does not clear out your completed wips
+ - NOTE: this doesnt permanently delete your wip from Markus' db. In the future I'm going to give him a way to recover deleted wips!
+  `
     }
   ]
 };
@@ -164,6 +235,16 @@ const embedCommands = {
     commands: ["markus help"],
     exact: true,
     artifacts: [helpArtifact]
+  },
+  wipHelp: {
+    commands: [
+      "how does your wip function work",
+      "wip help",
+      "wip tracker",
+      "how do i add a wip",
+      "how do i remove a wip"
+    ],
+    artifacts: [wipHelpArtifact]
   },
   updates: {
     commands: [

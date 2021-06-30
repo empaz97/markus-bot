@@ -50,6 +50,7 @@ const wipCommands = [
       "new wip",
       "add wip",
       "add a wip",
+      "add new wip",
       "add a new wip",
       "add to my wips"
     ],
