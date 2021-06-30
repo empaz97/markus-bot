@@ -2,17 +2,19 @@ const _ = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 
+const DatabaseHelper = require("./databaseHelper.class");
+
 const baseConstants = require("../constants/base");
 const textCommands = require("../constants/textCommands");
 const embedCommands = require("../constants/embedCommands");
 const mentionCommands = require("../constants/mentionCommands");
-const otherCommands = require("../constants/otherCommands");
+const databaseCommands = require("../constants/databaseCommands");
 
 class Markus {
   constructor(message, client, db) {
     this._matched = false;
     this.client = client;
-    this.db = db;
+    this.db = new DatabaseHelper(db);
     this.message = message;
     this.messageContent = message.content
       .toLowerCase()
@@ -164,9 +166,8 @@ class Markus {
       this.guildRequired();
       return;
     }
-    const query = `SELECT * FROM cannibal WHERE server='${this.message.guild.id}' ORDER BY mention DESC`;
     this.db
-      .query(query)
+      .fetchCannibals(this.message.guild.id)
       .then(res => {
         if (!res.rowCount) {
           this._send("There have been no cannibal incidents in this server!");
@@ -177,10 +178,7 @@ class Markus {
           );
         }
       })
-      .catch(e => {
-        console.error(`Error updating cannibal entries: "${query}"`);
-        console.error(e.stack);
-      });
+      .catch(e => this._send(e.message));
   }
 
   updateCannibals() {
@@ -188,30 +186,93 @@ class Markus {
       this.guildRequired();
       return;
     }
-    const query = `INSERT INTO cannibal(server, mention) VALUES('${this.message.guild.id}', NOW())`;
     this.db
-      .query(query)
+      .updateCannibals(this.message.guild.id)
       .then(() => this.fetchCannibals())
-      .catch(e => {
-        console.error(`Error updating cannibal entry: "${query}"`);
-        console.error(e.stack);
-      });
+      .catch(e => this._send(e.message));
   }
 
   clearCannibals() {
-    const query = `DELETE FROM cannibal WHERE server='${this.message.guild.id}'`;
     this.db
-      .query(query)
+      .clearCannibals(this.message.guild.id)
       .then(() => this.fetchCannibals())
-      .catch(e => {
-        console.error(`Error clearing cannibal entry: "${query}"`);
-        console.error(e.stack);
-      });
+      .catch(e => this._send(e.message));
+  }
+
+  formatWips(wipResults) {
+    if (!wipResults.rowCount) {
+      this._send("You have no wips");
+      return;
+    }
+    let msg = "Here is a list of your wips:\n";
+    wipResults.rows.forEach(wip => {
+      msg += `- ${wip.name}`;
+      if (wip.summary) {
+        msg += ` (*${wip.summary}*)`;
+      }
+      msg += "\n";
+    });
+    this._send(msg);
+  }
+
+  fetchWips() {
+    this.db
+      .fetchWips(this.message.author.id)
+      .then(res => this.formatWips(res))
+      .catch(e => this._send(e.message));
+  }
+
+  fetchCompleteWips() {
+    this.db
+      .fetchWips(this.message.author.id, true, true)
+      .then(res => this.formatWips(res))
+      .catch(e => this._send(e.message));
+  }
+
+  addWip(parts) {
+    // TODO: more error checking
+    this.db
+      .addWip(this.message.author.id, parts.name, parts.summary)
+      .then(() => this._send("Wip successfully added to your wip list!"))
+      .catch(e => this._send(e.message));
+  }
+
+  updateWip(parts) {
+    // TODO: more error checking
+    this.db
+      .updateWip(this.message.author.id, parts.name, parts.summary)
+      .then(() => this._send("Wip successfully updated!"))
+      .catch(e => this._send(e.message));
+  }
+
+  removeWip(parts) {
+    // TODO: more error checking
+    this.db
+      .addWip(this.message.author.id, parts.name)
+      .then(() => this._send("Wip successfully removed from your wip list!"))
+      .catch(e => this._send(e.message));
+  }
+
+  completeWip(parts) {
+    // TODO: more error checking
+    this.db
+      .completeWip(this.message.author.id, parts.name)
+      .then(() => this._send("Wip successfully marked as completed! Congrats!"))
+      .catch(e => this._send(e.message));
+  }
+
+  clearWips() {
+    this.db
+      .clearWips(this.message.author.id)
+      .then(() => this._send("Wip list successfully cleared!"))
+      .catch(e => this._send(e.message));
   }
 
   checkCannibals() {
     if (
-      this._commandMatched({ commands: otherCommands.cannibalCommands.clear })
+      this._commandMatched({
+        commands: databaseCommands.cannibalCommands.clear
+      })
     ) {
       if (!this.message.guild) {
         this.guildRequired();
@@ -226,7 +287,9 @@ class Markus {
     }
 
     if (
-      this._commandMatched({ commands: otherCommands.cannibalCommands.update })
+      this._commandMatched({
+        commands: databaseCommands.cannibalCommands.update
+      })
     ) {
       this.updateCannibals();
       this._matched = true;
@@ -234,11 +297,38 @@ class Markus {
     }
 
     if (
-      this._commandMatched({ commands: otherCommands.cannibalCommands.fetch })
+      this._commandMatched({
+        commands: databaseCommands.cannibalCommands.fetch
+      })
     ) {
       this.fetchCannibals();
       this._matched = true;
     }
+  }
+
+  checkWips() {
+    _.forEach(databaseCommands.wipCommands, command => {
+      if (this._commandMatched(command)) {
+        const actionMethod = _.bind(_.get(this, command.method), this);
+        // get the relevant function based on key and call it
+        if (command.hasParts) {
+          // TODO: parse parts
+          const parts = this.message.content.split(":");
+          if (parts.length < 2) {
+            this._send("Sorry, you must include a name for your wip!");
+          } else {
+            const name = parts[1].trim();
+            let summary = _.get(parts, "[2]");
+            if (summary) summary = summary.trim();
+            actionMethod({ name, summary });
+          }
+        } else {
+          actionMethod();
+        }
+        this._matched = true;
+        return false;
+      }
+    });
   }
 
   respondToMessage() {
@@ -260,6 +350,9 @@ class Markus {
     if (this._matched) return;
 
     this.checkCannibals();
+    if (this._matched) return;
+
+    this.checkWips();
     if (this._matched) return;
   }
 }
