@@ -261,7 +261,7 @@ const embedCommands = {
         author: "CB",
         url: "https://twitter.com/randomnerdposts/status/1361881392683094016",
         description:
-          "This wonderful painting was done by our very own CB. I can just feel the emotion in this piece",
+          "This wonderful painting was done by CB. I can just feel the emotion in this piece",
         image:
           "https://pbs.twimg.com/media/EuZfseRXMAYYkVT?format=jpg&name=large"
       },
@@ -295,7 +295,7 @@ const embedCommands = {
         image:
           "https://pbs.twimg.com/media/EySVpLbVEAQZEhK?format=jpg&name=4096x4096",
         description:
-          "An amazing screenshot taken by our very own Selrah who has a great eye for wonderful shots"
+          "An amazing screenshot taken by Selrah who has a great eye for wonderful shots"
       },
       {
         author: "Al Parker",

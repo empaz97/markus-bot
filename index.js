@@ -9,10 +9,7 @@ const connectionString = process.env.DATABASE_URL;
 const testMode = process.env.TEST_MODE;
 
 const client = new Client({
-  connectionString,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString
 });
 
 bot.on("ready", () => {
