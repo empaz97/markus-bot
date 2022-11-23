@@ -2,7 +2,7 @@ const _ = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 
-const DatabaseHelper = require("./databaseHelper.class");
+//const DatabaseHelper = require("./databaseHelper.class");
 
 const baseConstants = require("../constants/base");
 const textCommands = require("../constants/textCommands");
@@ -14,7 +14,7 @@ class Markus {
   constructor(message, client, db) {
     this._matched = false;
     this.client = client;
-    this.db = new DatabaseHelper(db);
+    // this.db = new DatabaseHelper(db);
     this.message = message;
     this.messageContent = message.content
       .toLowerCase()
@@ -166,19 +166,19 @@ class Markus {
       this.guildRequired();
       return;
     }
-    this.db
-      .fetchCannibals(this.message.guild.id)
-      .then(res => {
-        if (!res.rowCount) {
-          this._send("There have been no cannibal incidents in this server!");
-        } else {
-          const timeSince = moment(res.rows[0].mention).fromNow(true);
-          this._send(
-            `Time since last cannibal incident: ${timeSince}\nTotal cannibal incidents: ${res.rowCount}`
-          );
-        }
-      })
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .fetchCannibals(this.message.guild.id)
+    //   .then(res => {
+    //     if (!res.rowCount) {
+    //       this._send("There have been no cannibal incidents in this server!");
+    //     } else {
+    //       const timeSince = moment(res.rows[0].mention).fromNow(true);
+    //       this._send(
+    //         `Time since last cannibal incident: ${timeSince}\nTotal cannibal incidents: ${res.rowCount}`
+    //       );
+    //     }
+    //   })
+    //   .catch(e => this._send(e.message));
   }
 
   updateCannibals() {
@@ -186,17 +186,17 @@ class Markus {
       this.guildRequired();
       return;
     }
-    this.db
-      .updateCannibals(this.message.guild.id)
-      .then(() => this.fetchCannibals())
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .updateCannibals(this.message.guild.id)
+    //   .then(() => this.fetchCannibals())
+    //   .catch(e => this._send(e.message));
   }
 
   clearCannibals() {
-    this.db
-      .clearCannibals(this.message.guild.id)
-      .then(() => this.fetchCannibals())
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .clearCannibals(this.message.guild.id)
+    //   .then(() => this.fetchCannibals())
+    //   .catch(e => this._send(e.message));
   }
 
   formatWips(wipResults) {
@@ -216,56 +216,56 @@ class Markus {
   }
 
   fetchWips() {
-    this.db
-      .fetchWips(this.message.author.id)
-      .then(res => this.formatWips(res))
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .fetchWips(this.message.author.id)
+    //   .then(res => this.formatWips(res))
+    //   .catch(e => this._send(e.message));
   }
 
   fetchCompleteWips() {
-    this.db
-      .fetchWips(this.message.author.id, true, true)
-      .then(res => this.formatWips(res))
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .fetchWips(this.message.author.id, true, true)
+    //   .then(res => this.formatWips(res))
+    //   .catch(e => this._send(e.message));
   }
 
   addWip(parts) {
     // TODO: more error checking
-    this.db
-      .addWip(this.message.author.id, parts.name, parts.summary)
-      .then(() => this._send("Wip successfully added to your wip list!"))
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .addWip(this.message.author.id, parts.name, parts.summary)
+    //   .then(() => this._send("Wip successfully added to your wip list!"))
+    //   .catch(e => this._send(e.message));
   }
 
   updateWip(parts) {
     // TODO: more error checking
-    this.db
-      .updateWip(this.message.author.id, parts.name, parts.summary)
-      .then(() => this._send("Wip successfully updated!"))
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .updateWip(this.message.author.id, parts.name, parts.summary)
+    //   .then(() => this._send("Wip successfully updated!"))
+    //   .catch(e => this._send(e.message));
   }
 
   removeWip(parts) {
     // TODO: more error checking
-    this.db
-      .addWip(this.message.author.id, parts.name)
-      .then(() => this._send("Wip successfully removed from your wip list!"))
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .addWip(this.message.author.id, parts.name)
+    //   .then(() => this._send("Wip successfully removed from your wip list!"))
+    //   .catch(e => this._send(e.message));
   }
 
   completeWip(parts) {
     // TODO: more error checking
-    this.db
-      .completeWip(this.message.author.id, parts.name)
-      .then(() => this._send("Wip successfully marked as completed! Congrats!"))
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .completeWip(this.message.author.id, parts.name)
+    //   .then(() => this._send("Wip successfully marked as completed! Congrats!"))
+    //   .catch(e => this._send(e.message));
   }
 
   clearWips() {
-    this.db
-      .clearWips(this.message.author.id)
-      .then(() => this._send("Wip list successfully cleared!"))
-      .catch(e => this._send(e.message));
+    // this.db
+    //   .clearWips(this.message.author.id)
+    //   .then(() => this._send("Wip list successfully cleared!"))
+    //   .catch(e => this._send(e.message));
   }
 
   checkCannibals() {
