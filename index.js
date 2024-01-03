@@ -5,7 +5,7 @@ const baseConstants = require("./constants/base");
 
 const bot = new Discord.Client();
 const token = process.env.BOT_TOKEN;
-const connectionString = process.env.DATABASE_URL;
+// const connectionString = process.env.DATABASE_URL;
 const testMode = process.env.TEST_MODE;
 
 // const client = new Client({
@@ -44,3 +44,5 @@ bot.on("disconnect", () => {
 //     bot.login(token);
 //   })
 //   .catch(err => console.error("Could not connect to db...", err.stack));
+
+bot.login(token);
